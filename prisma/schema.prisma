@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RecommendationDecision {
+  INVEST
+  WATCHLIST
+  PASS
+}
+
+model ResearchHistory {
+  id           String                 @id @default(uuid())
+  companyName  String
+  ticker       String
+  researchDate DateTime               @default(now())
+  decision     RecommendationDecision
+  confidence   Float
+  createdAt    DateTime               @default(now())
+}
