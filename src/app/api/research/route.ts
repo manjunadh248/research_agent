@@ -45,8 +45,9 @@ export async function POST(request: Request) {
           let finalState = initialState as any;
           for await (const chunk of await app.stream(initialState)) {
              // chunk is an object with the node name as key and the state update as value
-             const agentName = Object.keys(chunk)[0];
-             const stateUpdate = chunk[agentName];
+             const chunkData = chunk as Record<string, any>;
+             const agentName = Object.keys(chunkData)[0];
+             const stateUpdate = chunkData[agentName];
              finalState = { ...finalState, ...stateUpdate };
              
              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: "progress", step: `Agent completed: ${agentName}`, agent: agentName })}\n\n`));
